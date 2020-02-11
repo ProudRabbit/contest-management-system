@@ -9,6 +9,10 @@ int main()
 {
 	speechManager SM;		//实例化一个演讲管理的对象
 	
+	//for (map<int, Speak>::iterator it = SM.m_Speaker.begin(); it != SM.m_Speaker.end(); it++)
+	//{
+	//	cout << "选手编号" << it->first << "选手姓名:" << it->second.m_name << "选手分数：" << it->second.m_score[0] << endl;
+	//}
 
 	int choose = 0;
 
@@ -22,8 +26,10 @@ int main()
 		switch (choose)
 		{
 			case 1:				//开始比赛
+				SM.startSpeech();
 				break;
 			case 2:				//查看记录
+				SM.loadRecord();
 				break;
 			case 3:				//清空记录
 				break;

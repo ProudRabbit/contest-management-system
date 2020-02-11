@@ -5,6 +5,12 @@
 #include<map>
 #include<string>
 #include"speak.h"
+#include<algorithm>
+#include<deque>
+#include<functional>
+#include<numeric>
+#include<fstream>
+
 using namespace std;
 
 
@@ -30,6 +36,30 @@ public:
 
 	//创建12名选手
 	void createSpeaker();
+
+	//开始演讲，比赛整个流程的控制函数
+	void startSpeech();
+
+	//抽签
+	void DrawSpeech();
+
+	//比赛
+	void SpeechContest();
+
+	//显示比赛结果
+	void showScore();
+
+	//保存分数
+	void saveRecord();
+
+	//读取往届记录
+	void loadRecord();
+
+	//判断文件是否为空
+	bool fileIsEmpty;
+
+	//存放往届记录的容器
+	map<int, vector<string>> m_Record;
 
 	//比赛选手容器  第一轮12人
 	vector<int> v1;
