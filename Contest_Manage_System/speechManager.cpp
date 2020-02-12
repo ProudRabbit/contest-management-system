@@ -42,6 +42,9 @@ void speechManager::initspeech()
 
 	//初始化比赛轮数
 	this->m_index = 1;
+
+	//清除文件记录
+	this->m_Record.clear();
 }
 
 void speechManager::createSpeaker()
@@ -90,6 +93,10 @@ void speechManager::startSpeech()
 	this->showScore();
 	//4.保存分数到文件中
 	this->saveRecord();
+
+	//重置比赛
+	this->initspeech();
+	this->createSpeaker();
 
 	cout << "本届比赛完毕" << endl;
 	system("pause");
@@ -208,7 +215,7 @@ void speechManager::SpeechContest()
 		}
 	}
 	cout << "-----------第" << this->m_index << "轮比赛结束----------" << endl;
-	system("pause");
+	//system("pause");
 }
 
 //显示比赛结果
@@ -253,6 +260,7 @@ void speechManager::saveRecord()
 	
 	//关闭
 	ofs.close();
+	this->fileIsEmpty = false;	//更改文件不为空的状态
 	cout << "记录已经保存" << endl;
 }
 
@@ -286,10 +294,78 @@ void speechManager::loadRecord()
 	ifs.putback(ch);	//将上面读取的字符放回去
 
 	string data;
+	int index = 0;
 
 	while (ifs >> data)
 	{
-		cout << data << endl;
+		//cout << data << endl;
+		int pos = -1;//查到逗号位置的变量
+		int start = 0;
+
+		vector<string> v;	//记录选手信息
+
+		while (true)
+		{
+			pos = data.find(",", start);
+			if (pos == -1)
+			{
+				//没有找到
+				break;
+			}
+			else
+			{
+				string temp = data.substr(start, pos - start);
+				v.push_back(temp);
+				//cout << temp << endl;
+				start = pos + 1;
+			}
+		}
+		this->m_Record.insert(make_pair(index, v));
+		index++;
+
+		//for (map<int, vector<string>>::iterator it = m_Record.begin(); it != m_Record.end(); it++)
+		//{
+		//	cout << "-----------第" << (it->first) +1<< "届比赛结果--------" << endl;
+		//	cout << "冠军的编号：" << (*it).second[0]<<" 姓名："<<it->second[1] << " 分数：" << it->second[2] << endl;
+		//}
 	}
 	ifs.close();
+}
+
+void speechManager::showRecord()
+{
+	this->loadRecord();		//载入文件
+	for (int i = 0; i < this->m_Record.size(); i++)
+	{
+		cout << "--------第" << i + 1 << "届比赛结果--------" << endl;
+		cout << "冠军的编号：" << m_Record[i][0] << " 姓名：" << m_Record[i][1] << " 分数：" << m_Record[i][2] << endl;
+		cout << "亚军的编号：" << m_Record[i][3] << " 姓名：" << m_Record[i][4] << " 分数：" << m_Record[i][5] << endl;
+		cout << "季军的编号：" << m_Record[i][6] << " 姓名：" << m_Record[i][7] << " 分数：" << m_Record[i][8] << endl;
+	}
+	cout << "-----------------------" << endl;
+	cout << endl;
+	system("pause");
+	system("cls");
+}
+
+void speechManager::clearRecord()
+{
+	cout << "是否清空？【请输入1或2  1.Y 2.N】" << endl;
+
+	int select;
+	cin >> select;
+	if (select == 1)
+	{
+		//确认清空
+		ofstream ofs;
+		ofs.open("Speech.csv",ios::trunc);
+		ofs.close();
+
+		this->initspeech();
+		this->createSpeaker();
+
+		cout << "清空成功" << endl;
+	}
+	system("pause");
+	system("cls");
 }

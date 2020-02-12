@@ -1,12 +1,13 @@
 #include<iostream>
 #include<string>
 #include"speechManager.h"
-
+#include<ctime>
 using namespace std;
 
 
 int main()
 {
+	srand((unsigned int)time(NULL));
 	speechManager SM;		//实例化一个演讲管理的对象
 	
 	//for (map<int, Speak>::iterator it = SM.m_Speaker.begin(); it != SM.m_Speaker.end(); it++)
@@ -29,9 +30,10 @@ int main()
 				SM.startSpeech();
 				break;
 			case 2:				//查看记录
-				SM.loadRecord();
+				SM.showRecord();
 				break;
 			case 3:				//清空记录
+				SM.clearRecord();
 				break;
 			case 0:				//退出系统
 				SM.exit_system();
